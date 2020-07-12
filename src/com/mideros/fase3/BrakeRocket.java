@@ -1,5 +1,7 @@
 package com.mideros.fase3;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * This this class implements Runnable to generate threads one to brake the
  * thrusters.
@@ -9,10 +11,14 @@ package com.mideros.fase3;
  * 
  */
 
-public class BrakeRocket implements Runnable {
+public class BrakeRocket extends Thread {
 
-	int brakePower;
-	Thruster thruster;
+	private int brakePower;
+	private Thruster thruster;
+
+	public BrakeRocket() {
+
+	}
 
 	public BrakeRocket(Thruster thruster, int brakePower) {
 		this.thruster = thruster;
@@ -21,9 +27,14 @@ public class BrakeRocket implements Runnable {
 
 	@Override
 	public void run() {
-		
-		thruster.brakeThruster(brakePower);
-		System.out.println("The thruster decreased to the indicated power");
+		try {
+			TimeUnit.MILLISECONDS.sleep(100);
+			thruster.brakeThruster(brakePower);
+			System.out.println("The thruster decreased to the indicated power");
 
+		} catch (InterruptedException e) {
+			System.out.println("BrakeRocket, interrupted");
+		}
 	}
+
 }

@@ -12,18 +12,18 @@ package com.mideros.fase3;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
-import java.util.concurrent.TimeUnit;
 
 public class RocketService {
 
-	Scanner lector = new Scanner(System.in);
-	DataValidation v = new DataValidation();
+	
+	private DataValidation v = new DataValidation();
+
 
 	public RocketService() {
 		// TODO Auto-generated constructor stub
 	}
-	//create the rocket1
+
+	// create the rocket1
 	public Rocket createRocket1() {
 		Rocket rocket1 = new Rocket();
 		String code = "32WESSDS";
@@ -48,11 +48,12 @@ public class RocketService {
 		}
 
 		rocket1.setThrusters(thrustersR1);
-		
+
 		return rocket1;
 
 	}
-	//create the rocket2
+
+	// create the rocket2
 	public Rocket createRocket2() {
 		Rocket rocket2 = new Rocket();
 		String code = "LDSFJA32";
@@ -89,75 +90,31 @@ public class RocketService {
 		rocket2.setThrusters(thrustersR2);
 		return rocket2;
 	}
-	//the thread to speed up  the thruster power
-	public void speedUp(Rocket rocket, Thruster thruster, int objPowerRocket) {
+	
 
-		System.out.println(
-				"The rocket " + rocket.getCode() + " star the race with the thuster " + thruster.getThrusterName());
-		(new Thread(new SpeedUpRocket(thruster, objPowerRocket))).start();
-		
-		try {
-			TimeUnit.MILLISECONDS.sleep(10000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		
-		brake(rocket, thruster );
-	}
-	
-	//the thread to brake  the thruster power
-	public void brake(Rocket rocket, Thruster thruster) {
-		
-		String objBrake="";
-		int objBrakeRocket=0;
-		boolean go=false;
-		
-		while(!go) {
-			System.out.println("Please, write the brake power: ");
-			objBrake=lector.nextLine();
-			if (!v.emptyData(objBrake)) {
-				if ((v.validateSpeedR1(objBrake,rocket))||(v.validateSpeedR2(objBrake, rocket))) {												
-					objBrakeRocket=Integer.parseInt(objBrake);
-					go = true;
-				} else {
-					System.out.println("Please try again, wrong starting speed");
-					go = false;
-				}										
-			}else {
-				System.out.println("Please try again, wrong brake power");
-				go = false;
-			}		
-		}		
-		System.out.println("The "+ thruster.getThrusterName() + " brake race");
-		(new Thread(new BrakeRocket(thruster, objBrakeRocket))).start();
-	}
-	
-	
-	//select one thruster according to the selected power
-	public Thruster generateThuster(Rocket rocket,int objPowerRocket) {
-		
+	// select one thruster according to the selected power
+	public Thruster generateThuster(Rocket rocket, int objPowerRocket) {
+
 		List<Thruster> thrusters = new ArrayList<Thruster>();
 		thrusters = rocket.getThrusters();
 		Thruster thruster = new Thruster();
 
-		for(int i=0; i<thrusters.size();i++) {
-			
-			if(objPowerRocket == thrusters.get(i).getMaxPower())
-			{
-				thruster=thrusters.get(i);
+		for (int i = 0; i < thrusters.size(); i++) {
+
+			if (objPowerRocket == thrusters.get(i).getMaxPower()) {
+				thruster = thrusters.get(i);
 				break;
-			}else {
-				if(objPowerRocket < thrusters.get(i).getMaxPower())
-				{
-					thruster=thrusters.get(i);
+			} else {
+				if (objPowerRocket < thrusters.get(i).getMaxPower()) {
+					thruster = thrusters.get(i);
 					break;
-				}else {
-					if(!(thrusters.get(i).getMaxPower() < objPowerRocket)) {
-						thruster=thrusters.get(i+1);						
+				} else {
+					if (!(thrusters.get(i).getMaxPower() < objPowerRocket)) {
+						thruster = thrusters.get(i + 1);
 					}
-				}				
-			}		
+				}
+			}
 		}
-		return thruster;	
+		return thruster;
 	}
 }
